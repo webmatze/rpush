@@ -154,7 +154,7 @@ Uses the more recent [Toast template](https://msdn.microsoft.com/en-us/library/w
 
 The `client_id` here is the SID URL as seen [here](https://msdn.microsoft.com/en-us/library/windows/apps/hh465407.aspx#7-SIDandSecret). Do not confuse it with the `client_id` on dashboard.
 
-You can (optionally) include a launch argument by adding a `launch` key to the notification data. 
+You can (optionally) include a launch argument by adding a `launch` key to the notification data.
 
 You can (optionally) include an [audio element](https://msdn.microsoft.com/en-us/library/windows/apps/xaml/br230842.aspx) by setting the sound on the notification.
 
@@ -186,6 +186,16 @@ n = Rpush::Wns::RawNotification.new
 n.app = Rpush::Wns::App.find_by_name("windows_phone_app")
 n.uri = 'http://...'
 n.data = { foo: 'foo', bar: 'bar' }
+n.save!
+```
+
+#### Windows Raw XML Push Notifications
+
+```ruby
+n = Rpush::Wns::RawXmlNotification.new
+n.app = Rpush::Wns::App.find_by_name("windows_phone_app")
+n.uri = 'http://...'
+n.data = "<root><foo>foo</foo><bar>bar</bar></root>"
 n.save!
 ```
 
@@ -297,4 +307,3 @@ with mysql and you're using a user named 'bob', you will need to grant a mysql u
 mysql database.
 
 To switch between ActiveRecord and Redis, set the `CLIENT` environment variable to either `active_record`, `redis` or `mongoid`.
-
