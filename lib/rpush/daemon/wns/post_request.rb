@@ -5,7 +5,9 @@ module Rpush
         def self.create(notification, access_token)
           stringify_keys(notification.data) unless notification.data.nil?
 
-          if raw_notification?(notification)
+          if raw_xml_notification?(notification)
+            RawXmlRequest.create(notification, access_token)
+          elsif raw_notification?(notification)
             RawRequest.create(notification, access_token)
           elsif badge_notification?(notification)
             BadgeRequest.create(notification, access_token)
@@ -16,6 +18,10 @@ module Rpush
 
         private_class_method
 
+        def self.raw_xml_notification?(notification)
+          notification.class.name.match(/RawXmlNotification/)
+        end
+
         def self.raw_notification?(notification)
           notification.class.name.match(/RawNotification/)
         end
@@ -25,7 +31,9 @@ module Rpush
         end
 
         def self.stringify_keys(data)
-          data.keys.each { |key| data[key.to_s || key] = data.delete(key) }
+          if data.is_a? Hash
+            data.keys.each { |key| data[key.to_s || key] = data.delete(key) }
+          end
         end
       end
     end
